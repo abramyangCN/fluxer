@@ -59,7 +59,9 @@ pub fn parse_public_url(raw: &str) -> Result<PublicUrl> {
 pub fn public_url_env(public_url: &str) -> Result<Vec<(String, String)>> {
     let parsed = parse_public_url(public_url)?;
     let base = parsed.base_url.as_str();
-    let gateway_base = format!("{}://{}", parsed.websocket_scheme, parsed.host);
+    let http_prefix = format!("{}://", parsed.scheme);
+    let ws_prefix = format!("{}://", parsed.websocket_scheme);
+    let gateway_base = base.replacen(&http_prefix, &ws_prefix, 1);
     let localhost_origins = "http://localhost,http://localhost:8088";
     Ok(vec![
         ("FLUXER_BASE_DOMAIN".to_owned(), parsed.host.clone()),

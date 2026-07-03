@@ -96,7 +96,7 @@ export class VoiceDataInitializer {
 		if (Config.voice.url) {
 			return Config.voice.url;
 		}
-		const protocol = new URL(Config.endpoints.apiPublic).protocol.slice(0, -1) === 'https' ? 'wss' : 'ws';
-		return `${protocol}://${new URL(Config.endpoints.apiPublic).hostname}/livekit`;
+		const apiUrl = new URL(Config.endpoints.apiPublic);
+		return `${apiUrl.origin.replace(/^http/, 'ws')}/livekit`;
 	}
 }
